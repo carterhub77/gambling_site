@@ -1,0 +1,96 @@
+from dataclasses import dataclass
+from dataclasses import field
+import random
+import operator
+
+@dataclass
+class Player:
+    name: str = ""
+    inventory: list[str] = field(default_factory=list)
+
+@dataclass
+class JackpotItem:
+    name: str = ""
+    owner: str = ""
+
+jackpot = []
+playerList = []
+item_prices = {"Shaggy": 1000, "Gucci": 500, "Sinister Branches": 2000, "SSHF": 5000, "Tabby Egg": 1200, "Noob Assist": 800}
+library = ["Shaggy", "Gucci", "Sinister Branches", "SSHF", "Tabby Egg", "Noob Assist"]
+player_count = int(input("How many people are there playing?\n"))
+
+def addPlayers():
+    for i in range(player_count):
+        playerName = input('Player {}: Please state your name.'.format(i+1))
+        starteritem1 = library[random.randint(0,len(library)-1)]
+        starteritem2 = library[random.randint(0,len(library)-1)]
+        playerList.append(Player(playerName,[starteritem1,starteritem2]))
+        print("Welcome to the jackpot game: " + playerName)
+
+def chooseItem():
+    for player in playerList:
+        inventory = player.inventory
+        player_name = player.name
+        print("Please choose an item out of your inventory " + player_name + ". Your inventory is: " + str(player.inventory))
+        item = input("")
+        while item not in inventory:
+            print("You do not own this item, try again")
+            item = input("Please choose an item from your inventory")
+        item1 = JackpotItem(item,player_name)
+        jackpot.append(item1)
+        print("Added " + str(item) + " to the jackpot")
+        itemIndex = player.inventory.index(item)
+        del player.inventory[itemIndex]
+
+
+def chooseWinner():
+    jackpotValue = 0
+    for items in jackpot:
+        jackpotValue += item_prices[items.name]
+    print("There is " + str(jackpotValue) + " Robux in the jackpot.")
+    jackpot_num = random.randint(1,jackpotValue)
+    winner = ""
+    runningTotal = 0
+    for item in jackpot:
+        name = item.name
+        value = item_prices[name]
+        runningTotal += value
+        if runningTotal >= jackpot_num:
+            print("calculating winner...")
+            winner = item.owner
+            print(str(winner)+ " has won!")
+            for plr in playerList:
+                if plr.name == winner:
+                    for objects in jackpot:
+                        plr.inventory.append(objects.name)
+                        print("Transferred {} to {}'s account.".format(objects.name,winner))
+            break
+    return winner
+
+repeat = False
+
+if player_count <= 1 or player_count >= 5:
+    print('Not a valid player amount')
+    quit()
+else:
+    addPlayers()
+    chooseItem()
+    chooseWinner()
+    question = input("Do you want to play again? (y/n)")
+    if question == "y":
+        repeat = True
+    else:
+        quit()
+
+while repeat == True:
+    if player_count <= 1 or player_count >= 5:
+        print('Not a valid player amount')
+        quit()
+    else:
+        chooseItem()
+        chooseWinner()
+        question = input("Do you want to play again? (y/n)")
+        if question == "y":
+            repeat = True
+        else:
+            quit()
