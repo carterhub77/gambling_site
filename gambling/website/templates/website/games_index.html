@@ -1,0 +1,8 @@
+
+<h1>Latest games</h1>
+<ul>
+{% for game in latestGames.all %}
+    <li>{{ game.status }}</li>
+{% endfor %}
+</ul>
+<a href="/newgame">Create a new game</a>
