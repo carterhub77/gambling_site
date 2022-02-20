@@ -1,0 +1,13 @@
+{% load static %}
+
+<h1>Pack of cards</h1>
+<h2>Deck remaining: {{currentDeck}} </h2>
+<h2>Current card: {{currentCard.cardDescription}} </h2>
+<img height="100px"src="{% static 'website/cardimages/'%}{{currentCard.cardImageName}}"></img>
+
+<form action="newcard" method="post">
+    {% csrf_token %}
+
+<br/>
+<button type="submit">Next card</button>
+</form>

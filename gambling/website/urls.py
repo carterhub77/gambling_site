@@ -21,4 +21,7 @@ urlpatterns = [
     path('newgame', views.newgame), 
     path('login', views.login), 
     path('loginprocess', views.loginprocess),  
+    path('pack', views.newpack), 
+    path('newcard', views.newcard),   
+
 ]
